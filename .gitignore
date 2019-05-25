@@ -1,0 +1,6 @@
+tweets
+editedTweets.csv
+*.bak
+*.db
+__pycashe__
+__pycache__
