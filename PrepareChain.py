@@ -28,8 +28,8 @@ class PrepareChain(object):
         初期化メソッド
         @param text チェーンを生成するための文章
         """
-        # if isinstance(text, str):
-            # text = text.decode("utf-8")
+        if isinstance(text, str):
+            text = text
         self.text = text
 
         # 形態素解析用タガー
@@ -49,6 +49,7 @@ class PrepareChain(object):
         # センテンス毎に3つ組にする
         for sentence in sentences:
             # 形態素解析
+            self.tagger.parse('')
             morphemes = self._morphological_analysis(sentence)
             # 3つ組をつくる
             triplets = self._make_triplet(morphemes)
@@ -85,7 +86,6 @@ class PrepareChain(object):
         @return 形態素で分割された配列
         """
         morphemes = []
-        # sentence = sentence.encode("utf-8")
         node = self.tagger.parseToNode(sentence)
         while node:
             if node.posid != 0:
@@ -137,12 +137,12 @@ class PrepareChain(object):
                 schema = f.read()
                 con.executescript(schema)
 
-            # データ整形
-            datas = [(triplet[0], triplet[1], triplet[2], freq) for (triplet, freq) in list(triplet_freqs.items())]
+        # データ整形
+        datas = [(triplet[0], triplet[1], triplet[2], freq) for (triplet, freq) in list(triplet_freqs.items())]
 
-            # データ挿入
-            p_statement = "insert into chain_freqs (prefix1, prefix2, suffix, freq) values (?, ?, ?, ?)"
-            con.executemany(p_statement, datas)
+        # データ挿入
+        p_statement = "insert into chain_freqs (prefix1, prefix2, suffix, freq) values (?, ?, ?, ?)"
+        con.executemany(p_statement, datas)
 
         # コミットしてクローズ
         con.commit()
@@ -154,7 +154,7 @@ class PrepareChain(object):
         @param triplet_freqs 3つ組とその出現回数の辞書 key: 3つ組（タプル） val: 出現回数
         """
         for triplet in triplet_freqs:
-            print(("|".join(triplet), "\t", triplet_freqs[triplet]))
+            print("|".join(triplet), "\t", triplet_freqs[triplet])
 
 
 class TestFunctions(unittest.TestCase):
