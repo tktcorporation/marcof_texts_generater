@@ -4,3 +4,4 @@ editedTweets.csv
 *.db
 __pycashe__
 __pycache__
+processed.csv
